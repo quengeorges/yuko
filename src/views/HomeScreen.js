@@ -1,5 +1,5 @@
-import React, { Component, useEffect } from 'react'
-import { View, Text, Button, StyleSheet, AsyncStorage } from "react-native";
+import React, { Component } from 'react';
+import { View, Text, Button, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner"
 
 export default class HomeScreen extends Component {
@@ -33,16 +33,22 @@ export default class HomeScreen extends Component {
         }
 
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                }}>
-
+            <View style={styles.container}>
                 <BarCodeScanner onBarCodeScanned={this.state.scanned ? undefined : this.handleBarCodeScanned} style={StyleSheet.absoluteFillObject}/>
-                {this.state.scanned && <Button title={"Tap to scan again"} onPress={() => this.setState({scanned: false})}/>}
+                {this.state.scanned && <Button title={"Tap to scan again"} style={styles.button} onPress={() => this.setState({scanned: false})}/>}
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "flex-end",
+        flexDirection: 'column',
+    },
+    button: {
+        backgroundColor: "#DDDDDD",
+        padding: 10,
+    }
+});

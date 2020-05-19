@@ -9,6 +9,7 @@ import HomeScreen from './src/views/HomeScreen'
 import ListScreen from './src/views/ListScreen'
 import DetailsScreen from './src/views/DetailsScreen'
 import FavoriteScreen from "./src/views/FavoriteScreen";
+import Icon from './src/components/Icon';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -47,9 +48,18 @@ export default function App() {
       <Provider store={store}>
           <NavigationContainer>
               <Tab.Navigator>
-                  <Tab.Screen name="Home" component={HomeStack} />
-                  <Tab.Screen name="List" component={ListStack} />
-                  <Tab.Screen name="Favorite" component={FavStack} />
+                  <Tab.Screen name="Home" component={HomeStack}
+                  options={{
+                      tabBarIcon: ({ focused }) => <Icon focused={focused} name="md-qr-scanner" />,
+                  }}/>
+                  <Tab.Screen name="List" component={ListStack}
+                  options={{
+                      tabBarIcon: ({ focused }) => <Icon focused={focused} name="md-list" />,
+                  }}/>
+                  <Tab.Screen name="Favorite" component={FavStack}
+                  options={{
+                      tabBarIcon: ({ focused }) => <Icon focused={focused} name="md-star-outline" />,
+                  }}/>
               </Tab.Navigator>
           </NavigationContainer>
       </Provider>

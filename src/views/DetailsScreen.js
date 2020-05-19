@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Text, ActivityIndicator, Button} from "react-native";
+import {ScrollView, View, Text, ActivityIndicator, Button, StyleSheet, Image} from "react-native";
 import { connect } from 'react-redux'
 import {addFavorite, addProduct, setCurrent} from "../../store/reducer/ProductReducer";
 
@@ -50,11 +50,12 @@ class DetailsScreen extends Component {
         this.props.addFavorite(this.props.current)
     };
     render() {
-        let button;
+        let button, score;
         if (this.props.favorites.find(elem => elem.code === this.props.current.code) === undefined) {
-            button = <Button onPress={this.addToFav}
-                                title="Add to favorite"
-                                color="#841584" />
+            button = <Button onPress={this.addToFav} style={styles.button} title="Add to favorite"/>
+        }
+        if (this.props.current.nutrition_grades !== "") {
+            score = <Image style={styles.image} source={{uri:`https://static.openfoodfacts.org/images/misc/nutriscore-${this.props.current.nutrition_grades}.png`}}/>
         }
         if (this.state.isLoading) {
             return (
@@ -64,10 +65,24 @@ class DetailsScreen extends Component {
             )
         }
         return (
-            <View>
-                <Text>{this.props.current.product_name}</Text>
-                {button}
-            </View>
+            <ScrollView>
+                <View style={styles.container}>
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: this.props.current.image_url
+                        }}
+                    />
+                    <Text style={styles.title}>{this.props.current.product_name}</Text>
+                    <Text style={styles.text}>Marque : {this.props.current.brands}</Text>
+                    <Text style={styles.text}>Ingédients : {this.props.current.ingredients_text_fr}</Text>
+                    <Text style={styles.title}>Nutrition</Text>
+                    <Image style={styles.secondImage} source={{uri:this.props.current.image_nutrition_url}}/>
+                    {score}
+                    {button}
+                </View>
+
+            </ScrollView>
         )
     }
 }
@@ -84,5 +99,38 @@ const mapDispatchToProps = {
     addFavorite,
     setCurrent
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 20,
+        textAlign: 'left'
+    },
+    button: {
+        marginVertical: 10,
+        alignItems: "center",
+        backgroundColor: "#DDDDDD",
+        padding: 10
+    },
+    image: {
+        height: 100,
+        width: 100,
+        resizeMode: 'contain'
+    },
+    secondImage: {
+      height: 300,
+      width: 300,
+      resizeMode: 'contain'
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: "bold"
+    },
+    text: {
+        marginVertical: 5
+    }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailsScreen)
